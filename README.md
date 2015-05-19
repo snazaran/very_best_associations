@@ -8,6 +8,17 @@ Do you know who serves your favorite bagel in Chicago? How about your favorite b
 
 **Users cannot currently sign in.** We'll study how to achieve that next week. **For now, just assume that the admin of the site is doing all of the data entry**, so you will call in when you love a dish somewhere and the admin will select your username from a dropdown when recording that info in the app.
 
+[Here is your target.](https://verybest-associations-target.herokuapp.com/)
+
+Solutions:
+
+ - [Part 1](https://github.com/dsgn425-s15/very_best_associations_solutions/commit/899f509fc4356f9cbfe9826d88897c647c32df19)
+ - [Part 2](https://github.com/dsgn425-s15/very_best_associations_solutions/commit/c1ff06cb805d7bdda66685d642eab78137074b14)
+ - [Part 3](https://github.com/dsgn425-s15/very_best_associations_solutions/commit/28c57b9b7f9de2466f88c691687e68662e8c40e6)
+ - [Part 4](https://github.com/dsgn425-s15/very_best_associations_solutions/commit/c3285568eadf0057fa11dbcd2c779a8919db0072)
+ - [Part 5](https://github.com/dsgn425-s15/very_best_associations_solutions/commit/ee2e2e4de23b50f981971ee4a270edec48489b85)
+ - [Part 6](https://github.com/dsgn425-s15/very_best_associations_solutions/commit/f8616e171edc8c25e0b513d08eb2932ddbbb4152)
+
 ## Domain Model
 
 The central resource in this application is **Favorites**. A favorite belongs to a user and specifies a particular restaurant and a particular dish. For example, my favorite burger in Chicago is served at Au Cheval. Yours might be at Umami Burger. So the favorites table looks like this:
@@ -186,9 +197,13 @@ Other views that require fixing:
 
 ## Part 5: Achieve User Stories
 
-Now, the interesting part. The core user story in this app is: I should be able to see a list of the venues that serve my favorite version of dishes.
+The real power of this app comes from being able to see collections of associated objects. As a user, I want to
 
-**Your task: on the users#show view, display a list of the user's favorites (which dish and which venue).**
+ - see a list of venues located in a neighborhood on the neighborhoods#show page (print names)
+ - see a list of favorites on the dishes#show page (print venue names and usernames)
+ - see a list of favorites on the venues#show page (print dish names and usernames)
+
+And, the most crucial part: **on the users#show view, display a list of the user's favorites (which dish and which venue).**
 
 You'll have to retrieve some rows from the Favorites table (the ones that belong to the user whose show page you are on). Because of the work we did in Part 2, this is as easy as
 
@@ -196,15 +211,20 @@ You'll have to retrieve some rows from the Favorites table (the ones that belong
 
 Loop through them in the view and display the associated venue's name and dish's name. You can decide what markup to use to make it look nice.
 
-Also,
-
- - display a list of venues located in a neighborhood on the neighborhoods#show page (print names)
- - display a list of favorites on the dishes#show page (print venue names and usernames)
- - display a list of favorites on the venues#show page (print dish names and usernames)
-
 ## Part 6 (optional)
 
-On the show page for a venue, display all of the dishes for which users have recorded that venue as being their favorite place.
+On the show page for a neighborhood, display all of the favorites that are in that neighborhood. You can use the `:through` option to achieve this easily:
+
+```ruby
+class Neighborhood < ActiveRecord::Base
+  has_many :venues
+  has_many :favorites, :through => :venues
+end
+```
+
+Now, in the view (or anywhere else you have a Neighborhood object), you can do
+
+    @neighborhood.favorites
 
 ## Part 7 (nothing to submit)
 
